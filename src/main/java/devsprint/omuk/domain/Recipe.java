@@ -12,6 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
+@Builder
 public class Recipe {
 
     @Id
