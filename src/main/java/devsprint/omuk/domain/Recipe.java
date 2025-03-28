@@ -26,8 +26,13 @@ public class Recipe {
 
     private int cookTime;
 
+    @ElementCollection
     @Enumerated(EnumType.STRING)
-    private MealTime mealTime;
+    private List<MealTime> mealTimes;
+
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<Season> seasons;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
