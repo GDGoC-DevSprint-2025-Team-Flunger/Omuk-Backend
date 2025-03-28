@@ -4,7 +4,7 @@ import devsprint.omuk.member.domain.Member;
 import lombok.Data;
 
 @Data
-public class MemberRequest {
+public class MemberSaveRequest {
 
     private String name;
     private String email;
