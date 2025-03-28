@@ -63,6 +63,16 @@ public class RecipeRepositoryTest {
     }
 
     @Test
+    @DisplayName("식사시간과 계절을 모두 만족하는 레시피가 조회되어야 한다")
+    void findByMealTimeAndSeason() {
+        List<Recipe> results = recipeRepository
+                .findByMealTimesContainingAndSeasonsContaining(MealTime.LUNCH, Season.SUMMER);
+
+        assertThat(results).hasSize(1);
+        assertThat(results.get(0).getTitle()).isEqualTo("김치볶음밥");
+    }
+
+    @Test
     @DisplayName("제목 키워드 검색이 잘 되어야 한다")
     void findByTitleContaining() {
         List<Recipe> results = recipeRepository.findByTitleContaining("김치");
