@@ -1,6 +1,7 @@
 package devsprint.omuk.member.dto;
 
 import devsprint.omuk.member.domain.MemberPreference;
+import devsprint.omuk.member.entity.MemberEntity;
 import lombok.Data;
 
 @Data
@@ -13,4 +14,5 @@ public class MemberPreferenceRequest {
     public MemberPreference toDomain(){
         return new MemberPreference(taste,time, allergy);
     }
+
 }

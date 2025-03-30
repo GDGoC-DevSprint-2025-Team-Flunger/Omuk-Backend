@@ -1,13 +1,8 @@
 package devsprint.omuk.member.controller;
 import devsprint.omuk.member.dto.MemberPreferenceRequest;
 import devsprint.omuk.member.dto.MemberSaveRequest;
-//import devsprint.omuk.member.repository.MemberRepository;
 import devsprint.omuk.member.service.MemberService;
-import jdk.jshell.Snippet;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

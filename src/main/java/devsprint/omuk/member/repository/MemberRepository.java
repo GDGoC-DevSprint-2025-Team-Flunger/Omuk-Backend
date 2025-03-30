@@ -1,19 +1,18 @@
 package devsprint.omuk.member.repository;
 
-import devsprint.omuk.member.domain.Member;
-import devsprint.omuk.member.domain.MemberPreference;
+import devsprint.omuk.member.entity.MemberEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-//@Repository
-//public interface MemberRepository {
-//    void saveMemberInformation(Member member);
+@Repository
+public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
+    Optional<MemberEntity> findByName(String name);
+    Optional<MemberEntity> findByEmail(String email);
+//    void saveMemberInformation(MemberEntity member);
 //    void saveMemberPreference(MemberPreference memberPreference);
-//    Optional<Member> findById(Long id);
-//    Optional<Member> findByName(String name);
-//    List<Member> findAll();
-//
-//    void clearStore();
-//}
+//    Optional<MemberEntity> findById(Long id);
+//    Optional<MemberEntity> findByName(String name);
+
+}
