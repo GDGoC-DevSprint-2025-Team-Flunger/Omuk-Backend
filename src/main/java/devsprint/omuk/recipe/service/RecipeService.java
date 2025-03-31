@@ -1,7 +1,7 @@
-package devsprint.omuk.service;
+package devsprint.omuk.recipe.service;
 
-import devsprint.omuk.domain.*;
-import devsprint.omuk.repository.RecipeRepository;
+import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

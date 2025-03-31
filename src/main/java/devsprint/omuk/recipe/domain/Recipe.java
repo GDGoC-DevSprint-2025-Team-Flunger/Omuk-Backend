@@ -1,4 +1,4 @@
-package devsprint.omuk.domain;
+package devsprint.omuk.recipe.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;

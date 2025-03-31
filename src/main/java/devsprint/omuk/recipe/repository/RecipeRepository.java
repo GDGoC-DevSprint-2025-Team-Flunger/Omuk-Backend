@@ -1,8 +1,6 @@
-package devsprint.omuk.repository;
+package devsprint.omuk.recipe.repository;
 
-import devsprint.omuk.domain.MealTime;
-import devsprint.omuk.domain.Recipe;
-import devsprint.omuk.domain.Season;
+import devsprint.omuk.recipe.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,10 @@
 package devsprint.omuk.repository;
 
-import devsprint.omuk.domain.*;
+import devsprint.omuk.recipe.domain.MealTime;
+import devsprint.omuk.recipe.domain.Recipe;
+import devsprint.omuk.recipe.domain.Season;
+import devsprint.omuk.recipe.domain.TasteType;
+import devsprint.omuk.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package devsprint.omuk.domain;
+package devsprint.omuk.recipe.domain;
 
 public enum TasteType {
     SPICY("매운맛"),

@@ -1,13 +1,11 @@
-package devsprint.omuk.controller;
+package devsprint.omuk.recipe.controller;
 
-import devsprint.omuk.domain.*;
-import devsprint.omuk.repository.RecipeRepository;
-import devsprint.omuk.service.RecipeService;
+import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
