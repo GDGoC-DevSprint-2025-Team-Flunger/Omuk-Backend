@@ -125,20 +125,4 @@ public class MemberPreferenceEntity {
             return "[]";  // 변환 실패 시 빈 배열을 반환
         }
     }
-//    public MemberPreferenceEntity() {}
-//    public MemberPreferenceEntity(Long id, Long memberId, String tasteJson, String timeJson, String allergyJson) {
-//        this.id = id;
-//        this.memberId = memberId;
-//        this.tasteJson = tasteJson;
-//        this.timeJson = timeJson;
-//        this.allergyJson = allergyJson;
-//    }
-//
-//    public static MemberPreferenceEntity of(MemberPreference memberPreference) {
-//        return new MemberPreferenceEntity(memberPreference.getMemberId(),
-//                memberPreference.getTaste(),
-//                memberPreference.getTime(),
-//                memberPreference.getAllergy());
-//
-//    }
 }
