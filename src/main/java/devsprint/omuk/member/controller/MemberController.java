@@ -22,8 +22,9 @@ public class MemberController{
     }
 
     @PostMapping("/preference")
-    public ResponseEntity<Void> addPreference(MemberPreferenceRequest memberPreferenceRequest) {
+    public ResponseEntity<Void> addPreference(@RequestBody MemberPreferenceRequest memberPreferenceRequest) {
         memberService.saveMemberPreference(memberPreferenceRequest);
         return ResponseEntity.ok().build();
     }
+
 }

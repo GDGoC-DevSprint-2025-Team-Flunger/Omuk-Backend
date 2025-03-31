@@ -24,7 +24,9 @@ public class MemberEntity {
         this.email = email;
     }
 
-    public MemberEntity() {
+    public MemberEntity() {}
 
+    public static MemberEntity of(Member member) {
+        return new MemberEntity(member.getName(), member.getEmail());
     }
 }

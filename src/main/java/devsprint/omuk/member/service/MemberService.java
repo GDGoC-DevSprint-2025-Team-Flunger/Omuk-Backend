@@ -1,8 +1,12 @@
 package devsprint.omuk.member.service;
 
+import devsprint.omuk.member.domain.Member;
+import devsprint.omuk.member.domain.MemberPreference;
 import devsprint.omuk.member.entity.MemberEntity;
 import devsprint.omuk.member.dto.MemberPreferenceRequest;
 import devsprint.omuk.member.dto.MemberSaveRequest;
+import devsprint.omuk.member.entity.MemberPreferenceEntity;
+import devsprint.omuk.member.repository.MemberPreferenceRepository;
 import devsprint.omuk.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +19,16 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Autowired
+    private MemberPreferenceRepository memberPreferenceRepository;
+
     public void saveMember(MemberSaveRequest memberRequest){
-        MemberEntity memberEntity = new MemberEntity(memberRequest.getName(),memberRequest.getEmail());
-        memberRepository.save(memberEntity);
+        Member member = memberRequest.toDomain();
+        memberRepository.save(MemberEntity.of(member));
     }
 
     public void saveMemberPreference(MemberPreferenceRequest memberPreferenceRequest){
-//        System.out.println(memberPreferenceRequest);
-//        memberRepository.saveMemberPreference(memberPreferenceRequest.toDomain());
+        MemberPreference memberPreference = memberPreferenceRequest.toDomain();
+        memberPreferenceRepository.save(MemberPreferenceEntity.of(memberPreference));
     }
 }
