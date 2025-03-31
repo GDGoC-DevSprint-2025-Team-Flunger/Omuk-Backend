@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberPreferenceRepository extends JpaRepository<MemberPreferenceEntity, Long> {
+    MemberPreferenceEntity findByMemberId(Long memberId);
 }
