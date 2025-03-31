@@ -3,6 +3,7 @@ package devsprint.omuk.member.service;
 import devsprint.omuk.member.domain.Member;
 import devsprint.omuk.member.domain.MemberPreference;
 import devsprint.omuk.member.dto.MemberPreferenceResponse;
+import devsprint.omuk.member.dto.MemberResponse;
 import devsprint.omuk.member.entity.MemberEntity;
 import devsprint.omuk.member.dto.MemberPreferenceRequest;
 import devsprint.omuk.member.dto.MemberSaveRequest;
@@ -31,6 +32,11 @@ public class MemberService {
     public void saveMemberPreference(MemberPreferenceRequest memberPreferenceRequest){
         MemberPreference memberPreference = memberPreferenceRequest.toDomain();
         memberPreferenceRepository.save(MemberPreferenceEntity.of(memberPreference));
+    }
+
+    public MemberResponse getMemberData(Long memberId){
+        MemberEntity memberEntity = memberRepository.findById(memberId).get();
+        return new MemberResponse(memberEntity);
     }
 
     public MemberPreferenceResponse getMemberPreference(Long memberId) {
