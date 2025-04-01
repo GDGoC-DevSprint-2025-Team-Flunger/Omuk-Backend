@@ -1,5 +1,6 @@
 package devsprint.omuk.recipe.domain;
 
+import devsprint.omuk.recipe.dto.RecipeResponseDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -60,4 +61,23 @@ public class Recipe {
     private String imageUrl;
     private String videoUrl;
     private Double averageRating;
+
+    public RecipeResponseDto toDto() {
+        return RecipeResponseDto.builder()
+                .id(this.id)
+                .title(this.title)
+                .difficulty(this.difficulty)
+                .cookTime(this.cookTime)
+                .mealTimes(this.mealTimes)
+                .seasons(this.seasons)
+                .tasteTags(this.tasteTags)
+                .allergyTags(this.allergyTags)
+                .ingredients(this.ingredients)
+                .steps(this.steps)
+                .substitutes(this.substitutes)
+                .imageUrl(this.imageUrl)
+                .videoUrl(this.videoUrl)
+                .averageRating(this.averageRating)
+                .build();
+    }
 }
