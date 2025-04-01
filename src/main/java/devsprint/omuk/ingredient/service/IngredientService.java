@@ -44,4 +44,14 @@ public class IngredientService {
             throw new RuntimeException("Ingredient not found for memberId " + memberId + " and id " + id);
         }
     }
+
+    public void deleteIngredient(Long memberId, Long id) {
+        Optional<IngredientEntity> ingredientEntity = ingredientRepository.findByIdAndMemberId(id, memberId);
+
+        if (ingredientEntity.isPresent()) {
+            ingredientRepository.delete(ingredientEntity.get());  // 재료 삭제
+        } else {
+            throw new RuntimeException("Ingredient not found for memberId " + memberId + " and id " + id);
+        }
+    }
 }
