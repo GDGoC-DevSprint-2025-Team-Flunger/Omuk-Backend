@@ -43,12 +43,13 @@ public class RecipeController {
     //조건 기반 추천(keyword, mealTime, season, tasteTag)
     @GetMapping("/recommendation")
     public List<RecipeResponseDto> getRecommendation(
-            @RequestParam(required = false) MealTime mealTime,
-            @RequestParam(required = false) Season season,
+            @RequestParam(required = false) List<MealTime> mealTimes,
+            @RequestParam(required = false) List<Season> seasons,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) TasteType tasteTag
+            @RequestParam(required = false) List<TasteType> tasteTags,
+            @RequestParam(required = false) List<AllergyTag> excludeAllergies
     ) {
-        return recipeService.getRecommendation(mealTime, season, keyword, tasteTag).stream()
+        return recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies).stream()
                 .map(Recipe::toDto)
                 .collect(Collectors.toList());
     }

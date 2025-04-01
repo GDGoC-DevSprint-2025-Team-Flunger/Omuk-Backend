@@ -17,7 +17,7 @@ public class RecipeResponseDto {
     private List<MealTime> mealTimes;
     private List<Season> seasons;
     private List<TasteType> tasteTags;
-    private List<String> allergyTags;
+    private List<AllergyTag> allergyTags;
     private List<String> ingredients;
     private List<String> steps;
     private Map<String, String> substitutes;

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,38 +25,45 @@ public class RecipeService {
         return recipeRepository.findById(id).orElse(null);
     }
 
-    public List<Recipe> getRecommendation(MealTime mealTime, Season season, String keyword, TasteType tasteTag) {
-        List<Recipe> candidates;
+    public List<Recipe> getRecommendation(List<MealTime> mealTimes, List<Season> seasons, String keyword, List<TasteType> tasteTags, List<AllergyTag> excludeAllergies) {
+        List<Recipe> results;
 
         //키워드 조건 필터 먼저
         if (keyword != null && !keyword.isBlank()) {
-            candidates = recipeRepository.findByTitleContaining(keyword);
+            results = recipeRepository.findByTitleContaining(keyword);
         } else {
-            candidates = recipeRepository.findAll();
+            results = recipeRepository.findAll();
         }
 
         //식사시간 조건 필터
-        if (mealTime != null) {
-            candidates = candidates.stream()
-                    .filter(r -> r.getMealTimes().contains(mealTime))
-                    .toList();
+        if (mealTimes != null && !mealTimes.isEmpty()) {
+            results = results.stream()
+                    .filter(r -> !Collections.disjoint(r.getMealTimes(), mealTimes))
+                    .collect(Collectors.toList());
         }
 
         //계절 조건 필터
-        if (season != null) {
-            candidates = candidates.stream()
-                    .filter(r -> r.getSeasons().contains(season))
-                    .toList();
+        if (seasons != null && !seasons.isEmpty()) {
+            results = results.stream()
+                    .filter(r -> !Collections.disjoint(r.getSeasons(), seasons))
+                    .collect(Collectors.toList());
         }
 
         //맛 조건 필터
-        if (tasteTag != null) {
-            candidates = candidates.stream()
-                    .filter(r -> r.getTasteTags().contains(tasteTag))
-                    .toList();
+        if (tasteTags != null && !tasteTags.isEmpty()) {
+            results = results.stream()
+                    .filter(r -> !Collections.disjoint(r.getTasteTags(), tasteTags))
+                    .collect(Collectors.toList());
         }
 
-        return candidates;
+        //알러지 제외 조건 필터
+        if (excludeAllergies != null && !excludeAllergies.isEmpty()) {
+            results = results.stream()
+                    .filter(r -> Collections.disjoint(r.getAllergyTags(), excludeAllergies))
+                    .collect(Collectors.toList());
+        }
+
+        return results;
     }
 
     public List<Recipe> getRandomRecipes(int count) {

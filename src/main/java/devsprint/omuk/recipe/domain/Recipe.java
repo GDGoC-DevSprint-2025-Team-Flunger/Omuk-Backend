@@ -41,7 +41,8 @@ public class Recipe {
     private List<TasteType> tasteTags;
 
     @ElementCollection
-    private List<String> allergyTags;
+    @Enumerated(EnumType.STRING)
+    private List<AllergyTag> allergyTags;
 
     @ElementCollection
     @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
