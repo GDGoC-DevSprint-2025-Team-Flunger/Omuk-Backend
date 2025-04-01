@@ -27,7 +27,17 @@ public class IngredientController {
     @GetMapping("/{memberId}")
     public ResponseEntity<List<IngredientResponse>> getAllIngredients(@PathVariable long memberId) {
         List<IngredientResponse> ingredientResponses = ingredientService.findAll(memberId);
-        return ResponseEntity.ok(ingredientResponses);  // 리스트 반환
+        return ResponseEntity.ok(ingredientResponses);
+    }
+
+    @PutMapping("/{memberId}/{id}")
+    public ResponseEntity<IngredientResponse> updateIngredient(
+            @PathVariable Long memberId,
+            @PathVariable Long id,
+            @RequestBody IngredientRequest ingredientRequest) {
+
+        IngredientResponse updatedIngredient = ingredientService.updateIngredient(memberId, id, ingredientRequest);
+        return ResponseEntity.ok(updatedIngredient);
     }
 
 
