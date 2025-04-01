@@ -7,6 +7,7 @@ import devsprint.omuk.member.dto.Taste;
 import devsprint.omuk.member.dto.Time;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,12 +25,15 @@ public class MemberPreferenceEntity {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
+    @Setter
     @Column(name = "taste")
     private String tasteJson;
 
+    @Setter
     @Column(name = "time")
     private String timeJson;
 
+    @Setter
     @Column(name = "allergy")
     private String allergyJson;
 
@@ -94,7 +98,7 @@ public class MemberPreferenceEntity {
     }
 
     // List<Taste>를 JSON 문자열로 변환
-    private static String toTasteJsonString(List<Taste> list) {
+    public static String toTasteJsonString(List<Taste> list) {
         try {
             List<String> tasteNames = list.stream().map(Taste::name).collect(Collectors.toList());
             return objectMapper.writeValueAsString(tasteNames);
@@ -105,7 +109,7 @@ public class MemberPreferenceEntity {
     }
 
     // List<Allergy>를 JSON 문자열로 변환
-    private static String toAllergyJsonString(List<Allergy> list) {
+    public static String toAllergyJsonString(List<Allergy> list) {
         try {
             List<String> allergyNames = list.stream().map(Allergy::name).collect(Collectors.toList());
             return objectMapper.writeValueAsString(allergyNames);
@@ -116,7 +120,7 @@ public class MemberPreferenceEntity {
     }
 
     // List<Time>을 JSON 문자열로 변환
-    private static String toTimeJsonString(List<Time> list) {
+    public static String toTimeJsonString(List<Time> list) {
         try {
             List<String> timeNames = list.stream().map(Time::name).collect(Collectors.toList());
             return objectMapper.writeValueAsString(timeNames);

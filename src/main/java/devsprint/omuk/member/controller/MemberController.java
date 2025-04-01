@@ -42,4 +42,11 @@ public class MemberController{
         return ResponseEntity.ok(preferenceResponse);
     }
 
+    @PutMapping("/preference/{memberId}")
+    public ResponseEntity<Void> updateMemberPreference(@PathVariable Long memberId,
+                                                       @RequestBody MemberPreferenceRequest memberPreferenceRequest) {
+        memberService.updateMemberPreference(memberId, memberPreferenceRequest);
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -34,6 +34,23 @@ public class MemberService {
         memberPreferenceRepository.save(MemberPreferenceEntity.of(memberPreference));
     }
 
+    public void updateMemberPreference(Long memberId, MemberPreferenceRequest memberPreferenceRequest) {
+        // 1. 기존 MemberPreferenceEntity를 찾습니다.
+        MemberPreferenceEntity existingPreference = memberPreferenceRepository.findByMemberId(memberId);
+
+        if (existingPreference == null) {
+            throw new RuntimeException("Preference not found for memberId: " + memberId);
+        }
+
+        // 2. MemberPreferenceRequest에서 받은 데이터를 기존 엔티티에 설정합니다.
+        existingPreference.setTasteJson(MemberPreferenceEntity.toTasteJsonString(memberPreferenceRequest.getTaste()));
+        existingPreference.setAllergyJson(MemberPreferenceEntity.toAllergyJsonString(memberPreferenceRequest.getAllergy()));
+        existingPreference.setTimeJson(MemberPreferenceEntity.toTimeJsonString(memberPreferenceRequest.getTime()));
+
+        // 3. 변경된 MemberPreferenceEntity를 저장합니다.
+        memberPreferenceRepository.save(existingPreference);
+    }
+
     public MemberResponse getMemberData(Long memberId){
         MemberEntity memberEntity = memberRepository.findById(memberId).get();
         return new MemberResponse(memberEntity);
