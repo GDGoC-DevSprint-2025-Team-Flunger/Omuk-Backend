@@ -25,7 +25,7 @@ public class RecipeService {
         return recipeRepository.findById(id).orElse(null);
     }
 
-    public List<Recipe> getRecommendation(List<MealTime> mealTimes, List<Season> seasons, String keyword, List<TasteType> tasteTags, List<AllergyTag> excludeAllergies) {
+    public List<Recipe> getRecommendation(List<MealTime> mealTimes, List<Season> seasons, String keyword, List<TasteType> tasteTags, List<AllergyTag> excludeAllergies, List<String> selectedIngredients) {
         List<Recipe> results;
 
         //키워드 조건 필터 먼저
@@ -60,6 +60,13 @@ public class RecipeService {
         if (excludeAllergies != null && !excludeAllergies.isEmpty()) {
             results = results.stream()
                     .filter(r -> Collections.disjoint(r.getAllergyTags(), excludeAllergies))
+                    .collect(Collectors.toList());
+        }
+
+        //재료 기반 필터
+        if (selectedIngredients != null && !selectedIngredients.isEmpty()) {
+            results = results.stream()
+                    .filter(r -> !Collections.disjoint(r.getIngredients(), selectedIngredients))
                     .collect(Collectors.toList());
         }
 

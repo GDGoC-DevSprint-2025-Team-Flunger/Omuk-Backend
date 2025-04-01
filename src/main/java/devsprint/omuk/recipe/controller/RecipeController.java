@@ -47,9 +47,10 @@ public class RecipeController {
             @RequestParam(required = false) List<Season> seasons,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) List<TasteType> tasteTags,
+            @RequestParam(required = false) List<String> selectedIngredients,
             @RequestParam(required = false) List<AllergyTag> excludeAllergies
     ) {
-        return recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies).stream()
+        return recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients).stream()
                 .map(Recipe::toDto)
                 .collect(Collectors.toList());
     }
