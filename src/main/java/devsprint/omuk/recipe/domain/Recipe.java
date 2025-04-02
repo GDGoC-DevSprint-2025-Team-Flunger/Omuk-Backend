@@ -12,7 +12,7 @@ import java.util.Map;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
 @Builder
 public class Recipe {
 
