@@ -51,4 +51,20 @@ public class RecipeController {
         List<RecipeResponseDto> recipes = recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients);
         return ResponseEntity.ok(recipes);
     }
+
+    // 즐겨찾기 추가
+    @PostMapping("/favorites/add")
+    public ResponseEntity<String> addFavorite(
+            @RequestParam Integer memberId,
+            @RequestParam Long recipeId
+    ) {
+        recipeService.addFavorite(memberId, recipeId);
+        return ResponseEntity.ok("즐겨찾기 추가 완료");
+    }
+
+    // 즐겨찾기 레시피 조회
+    @GetMapping("/favorites")
+    public List<RecipeResponseDto> getFavoriteRecipes(@RequestParam Integer memberId) {
+        return recipeService.getFavoriteRecipes(memberId);
+    }
 }

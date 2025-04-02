@@ -2,6 +2,7 @@ package devsprint.omuk.recipe.service;
 
 import devsprint.omuk.recipe.domain.*;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
+import devsprint.omuk.recipe.repository.FavoriteRepository;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final FavoriteRepository favoriteRepository;
 
     public List<RecipeResponseDto> getAllRecipes() {
         return recipeRepository.findAll().stream()
@@ -80,6 +82,27 @@ public class RecipeService {
         Collections.shuffle(all);
         return all.stream().limit(count)
                 .map(Recipe::toDto)
+                .collect(Collectors.toList());
+    }
+
+    // 즐겨찾기 추가
+    public void addFavorite(Integer memberId, Long recipeId) {
+        // 이미 즐겨찾기 된 레시피는 다시 추가하지 않음
+        if (!favoriteRepository.existsByMemberIdAndRecipeId(memberId, recipeId)) {
+            Favorite favorite = new Favorite(memberId, recipeId);
+            favoriteRepository.save(favorite);
+        }
+    }
+
+    // 즐겨찾기 레시피 조회
+    public List<RecipeResponseDto> getFavoriteRecipes(Integer memberId) {
+        List<Favorite> favorites = favoriteRepository.findByMemberId(memberId);
+        return favorites.stream()
+                .map(favorite -> {
+                    Recipe recipe = recipeRepository.findById(favorite.getRecipeId()).orElse(null);
+                    return recipe != null ? recipe.toDto() : null;
+                })
+                .filter(recipeResponseDto -> recipeResponseDto != null)
                 .collect(Collectors.toList());
     }
 }
