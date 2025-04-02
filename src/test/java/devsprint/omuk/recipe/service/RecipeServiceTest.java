@@ -1,6 +1,8 @@
 package devsprint.omuk.recipe.service;
 
 import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.dto.RecipeResponseDto;
+import devsprint.omuk.recipe.repository.FavoriteRepository;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,9 @@ public class RecipeServiceTest {
 
     @Mock
     private RecipeRepository recipeRepository;
+
+    @Mock
+    private FavoriteRepository favoriteRepository;
 
     @InjectMocks
     private RecipeService recipeService;
@@ -37,7 +42,7 @@ public class RecipeServiceTest {
                 .tasteTags(List.of(TasteType.SPICY, TasteType.SALTY))
                 .allergyTags(List.of(AllergyTag.EGG))
                 .ingredients(List.of("김치", "밥", "햄", "치즈"))
-                .steps(List.of("김치를 작게 썬다.", "햄과 치즈를 준비한다.", "팬에 김치를 볶는다.", "밥과 햄을 넣고 함께 볶는다.", "치즈를 얹고 섞은 뒤 완성한다."))
+                .steps(List.of("김치를 작게 썬다.", "햄과 치즈를 준비한다."))
                 .imageUrl("https://example.com/image")
                 .videoUrl("https://youtube.com")
                 .averageRating(4.5)
@@ -46,13 +51,10 @@ public class RecipeServiceTest {
 
     @Test
     void testGetAllRecipes() {
-        // Given
         when(recipeRepository.findAll()).thenReturn(List.of(recipe));
 
-        // When
-        List<Recipe> recipes = recipeService.getAllRecipes();
+        List<RecipeResponseDto> recipes = recipeService.getAllRecipes();
 
-        // Then
         assertNotNull(recipes);
         assertEquals(1, recipes.size());
         assertEquals("김치볶음밥", recipes.get(0).getTitle());
@@ -60,27 +62,21 @@ public class RecipeServiceTest {
 
     @Test
     void testGetRecipeById() {
-        // Given
         when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe));
 
-        // When
-        Recipe result = recipeService.getRecipeById(1L);
+        RecipeResponseDto result = recipeService.getRecipeById(1L);
 
-        // Then
         assertNotNull(result);
         assertEquals("김치볶음밥", result.getTitle());
     }
 
     @Test
     void testGetRecommendationWithKeyword() {
-        // Given
         when(recipeRepository.findByTitleContaining("김치")).thenReturn(List.of(recipe));
 
-        // When
-        List<Recipe> recipes = recipeService.getRecommendation(
+        List<RecipeResponseDto> recipes = recipeService.getRecommendation(
                 null, null, "김치", null, null, null);
 
-        // Then
         assertNotNull(recipes);
         assertEquals(1, recipes.size());
         assertEquals("김치볶음밥", recipes.get(0).getTitle());
@@ -88,14 +84,29 @@ public class RecipeServiceTest {
 
     @Test
     void testGetRandomRecipes() {
-        // Given
         when(recipeRepository.findAll()).thenReturn(List.of(recipe));
 
-        // When
-        List<Recipe> randomRecipes = recipeService.getRandomRecipes(1);
+        List<RecipeResponseDto> randomRecipes = recipeService.getRandomRecipes(1);
 
-        // Then
         assertNotNull(randomRecipes);
         assertEquals(1, randomRecipes.size());
+    }
+
+    @Test
+    void testGetFavoriteRecipes() {
+        Favorite favorite = Favorite.builder()
+                .id(1L)
+                .memberId(100)
+                .recipeId(1L)
+                .build();
+
+        when(favoriteRepository.findByMemberId(100)).thenReturn(List.of(favorite));
+        when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe));
+
+        List<RecipeResponseDto> favorites = recipeService.getFavoriteRecipes(100);
+
+        assertNotNull(favorites);
+        assertEquals(1, favorites.size());
+        assertEquals("김치볶음밥", favorites.get(0).getTitle());
     }
 }

@@ -1,20 +1,20 @@
 package devsprint.omuk.recipe.controller;
 
 import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.dto.RecipeResponseDto;
 import devsprint.omuk.recipe.service.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class RecipeControllerTest {
@@ -26,14 +26,14 @@ public class RecipeControllerTest {
     private RecipeController recipeController;
 
     private MockMvc mockMvc;
-    private Recipe recipe;
+    private RecipeResponseDto recipeDto;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        recipe = Recipe.builder()
+        recipeDto = RecipeResponseDto.builder()
                 .id(1L)
                 .title("김치볶음밥")
                 .difficulty(2)
@@ -44,6 +44,7 @@ public class RecipeControllerTest {
                 .allergyTags(List.of(AllergyTag.EGG))
                 .ingredients(List.of("김치", "밥", "햄", "치즈"))
                 .steps(List.of("김치를 작게 썬다.", "햄과 치즈를 준비한다.", "팬에 김치를 볶는다.", "밥과 햄을 넣고 함께 볶는다.", "치즈를 얹고 섞은 뒤 완성한다."))
+                .substitutes(null)
                 .imageUrl("https://example.com/image")
                 .videoUrl("https://youtube.com")
                 .averageRating(4.5)
@@ -52,10 +53,8 @@ public class RecipeControllerTest {
 
     @Test
     void testGetAllRecipes() throws Exception {
-        // Given
-        when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
+        when(recipeService.getAllRecipes()).thenReturn(List.of(recipeDto));
 
-        // When & Then
         mockMvc.perform(get("/recipe/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("김치볶음밥"));
@@ -63,10 +62,8 @@ public class RecipeControllerTest {
 
     @Test
     void testGetRecipeById() throws Exception {
-        // Given
-        when(recipeService.getRecipeById(1L)).thenReturn(recipe);
+        when(recipeService.getRecipeById(1L)).thenReturn(recipeDto);
 
-        // When & Then
         mockMvc.perform(get("/recipe/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("김치볶음밥"));
@@ -74,10 +71,8 @@ public class RecipeControllerTest {
 
     @Test
     void testGetRandomRecommendation() throws Exception {
-        // Given
-        when(recipeService.getRandomRecipes(4)).thenReturn(List.of(recipe));
+        when(recipeService.getRandomRecipes(4)).thenReturn(List.of(recipeDto));
 
-        // When & Then
         mockMvc.perform(get("/recipe/recommendation/random"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("김치볶음밥"));
@@ -85,12 +80,10 @@ public class RecipeControllerTest {
 
     @Test
     void testGetRecommendation() throws Exception {
-        // Given
         when(recipeService.getRecommendation(
                 null, null, "김치", null, null, null
-        )).thenReturn(List.of(recipe));
+        )).thenReturn(List.of(recipeDto));
 
-        // When & Then
         mockMvc.perform(get("/recipe/recommendation")
                         .param("keyword", "김치"))
                 .andExpect(status().isOk())
