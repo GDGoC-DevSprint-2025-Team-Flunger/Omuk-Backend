@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberService {
-    @Autowired
-    private MemberRepository memberRepository;
-    public MemberService(MemberRepository memberRepository) {
+    private final MemberRepository memberRepository;
+    private final MemberPreferenceRepository memberPreferenceRepository;
+
+    public MemberService(MemberRepository memberRepository, MemberPreferenceRepository memberPreferenceRepository) {
         this.memberRepository = memberRepository;
+        this.memberPreferenceRepository = memberPreferenceRepository;
     }
 
-    @Autowired
-    private MemberPreferenceRepository memberPreferenceRepository;
 
     public void saveMember(MemberSaveRequest memberRequest){
         Member member = memberRequest.toDomain();
