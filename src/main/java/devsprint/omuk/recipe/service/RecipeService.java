@@ -1,6 +1,7 @@
 package devsprint.omuk.recipe.service;
 
 import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.dto.RecipeResponseDto;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,17 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
 
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+    public List<RecipeResponseDto> getAllRecipes() {
+        return recipeRepository.findAll().stream()
+                .map(Recipe::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Recipe getRecipeById(Long id) {
-        return recipeRepository.findById(id).orElse(null);
-    }
+    public RecipeResponseDto getRecipeById(Long id) {
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        return recipe != null ? recipe.toDto() : null;    }
 
-    public List<Recipe> getRecommendation(List<MealTime> mealTimes, List<Season> seasons, String keyword, List<TasteType> tasteTags, List<AllergyTag> excludeAllergies, List<String> selectedIngredients) {
+    public List<RecipeResponseDto> getRecommendation(List<MealTime> mealTimes, List<Season> seasons, String keyword, List<TasteType> tasteTags, List<AllergyTag> excludeAllergies, List<String> selectedIngredients) {
         List<Recipe> results;
 
         //키워드 조건 필터 먼저
@@ -70,12 +73,13 @@ public class RecipeService {
                     .collect(Collectors.toList());
         }
 
-        return results;
-    }
+        return results.stream().map(Recipe::toDto).collect(Collectors.toList());    }
 
-    public List<Recipe> getRandomRecipes(int count) {
+    public List<RecipeResponseDto> getRandomRecipes(int count) {
         List<Recipe> all = recipeRepository.findAll();
         Collections.shuffle(all);
-        return all.stream().limit(count).toList();
+        return all.stream().limit(count)
+                .map(Recipe::toDto)
+                .collect(Collectors.toList());
     }
 }
