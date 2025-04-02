@@ -19,10 +19,11 @@ public class RecipeController {
 
     //전체 레시피 조회
     @GetMapping("/list")
-    public List<RecipeResponseDto> getAllRecipes() {
-        return recipeService.getAllRecipes().stream()
+    public ResponseEntity<List<RecipeResponseDto>> getAllRecipes() {
+        List<RecipeResponseDto> recipeList = recipeService.getAllRecipes().stream()
                 .map(Recipe::toDto)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(recipeList);
     }
 
     //특정 레시피 조회
@@ -34,15 +35,16 @@ public class RecipeController {
 
     //랜덤 추천
     @GetMapping("/recommendation/random")
-    public List<RecipeResponseDto> getRandomRecommendation() {
-        return recipeService.getRandomRecipes(4).stream()
+    public ResponseEntity<List<RecipeResponseDto>> getRandomRecommendation() {
+        List<RecipeResponseDto> randomRecipes = recipeService.getRandomRecipes(4).stream()
                 .map(Recipe::toDto)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(randomRecipes);
     }
 
     //조건 기반 추천(keyword, mealTime, season, tasteTag)
     @GetMapping("/recommendation")
-    public List<RecipeResponseDto> getRecommendation(
+    public ResponseEntity<List<RecipeResponseDto>> getRecommendation(
             @RequestParam(required = false) List<MealTime> mealTimes,
             @RequestParam(required = false) List<Season> seasons,
             @RequestParam(required = false) String keyword,
@@ -50,8 +52,9 @@ public class RecipeController {
             @RequestParam(required = false) List<String> selectedIngredients,
             @RequestParam(required = false) List<AllergyTag> excludeAllergies
     ) {
-        return recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients).stream()
+        List<RecipeResponseDto> recommendedRecipes = recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients).stream()
                 .map(Recipe::toDto)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(recommendedRecipes);
     }
 }
