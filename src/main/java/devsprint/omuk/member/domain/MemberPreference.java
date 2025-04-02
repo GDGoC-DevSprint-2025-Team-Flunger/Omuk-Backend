@@ -10,11 +10,11 @@ import java.util.List;
 @Getter
 public class MemberPreference {
     private Long memberId;
-    private List<Taste> taste;
-    private List<Time> time;
-    private List<Allergy> allergy;
+    private String taste;
+    private String time;
+    private String allergy;
 
-    public MemberPreference(Long memberId, List<Taste> taste, List<Time> time, List<Allergy> allergy) {
+    public MemberPreference(Long memberId, String taste, String time, String allergy) {
         this.memberId = memberId;
         this.taste = taste;
         this.time = time;

@@ -9,15 +9,16 @@ import java.util.List;
 public class MemberPreferenceResponse {
 
     private Long memberId;
-    private List<Taste> taste;
-    private List<Allergy> allergy;
-    private List<Time> time;
+    private String taste;
+    private String allergy;
+    private String time;
 
-    // 생성자
-    public MemberPreferenceResponse(MemberPreferenceEntity memberPreferenceEntity) {
-        this.memberId = memberPreferenceEntity.getMemberId();
-        this.taste = memberPreferenceEntity.getTaste();
-        this.allergy = memberPreferenceEntity.getAllergy();
-        this.time = memberPreferenceEntity.getTime();
+    // Projection을 받아서 DTO로 변환하는 생성자
+    public MemberPreferenceResponse(MemberPreferenceProjection projection) {
+        this.memberId = projection.getMemberId();
+        this.taste = projection.getTasteTypes();
+        this.allergy = projection.getAllergyTypes();
+        this.time = projection.getTimeTypes();
     }
 }
+

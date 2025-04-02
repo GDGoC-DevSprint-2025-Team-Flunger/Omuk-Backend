@@ -7,6 +7,8 @@ import devsprint.omuk.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/member")
@@ -30,23 +32,16 @@ public class MemberController{
         return ResponseEntity.ok(memberResponse);
     }
 
-    @PostMapping("/preference")
-    public ResponseEntity<Void> addPreference(@RequestBody MemberPreferenceRequest memberPreferenceRequest) {
-        memberService.saveMemberPreference(memberPreferenceRequest);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/preference")
+//    public ResponseEntity<Void> addPreference(@RequestBody MemberPreferenceRequest memberPreferenceRequest) {
+//        memberService.saveMemberPreference(memberPreferenceRequest);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/preference/{memberId}")
-    public ResponseEntity<MemberPreferenceResponse> getMemberPreference(@PathVariable Long memberId) {
-        MemberPreferenceResponse preferenceResponse = memberService.getMemberPreference(memberId);
-        return ResponseEntity.ok(preferenceResponse);
+    public ResponseEntity<MemberPreferenceResponse> getPreferenceByMemberId(@PathVariable Long memberId) {
+        return ResponseEntity.ok(memberService.getPreferenceByMemberId(memberId));
     }
 
-    @PutMapping("/preference/{memberId}")
-    public ResponseEntity<Void> updateMemberPreference(@PathVariable Long memberId,
-                                                       @RequestBody MemberPreferenceRequest memberPreferenceRequest) {
-        memberService.updateMemberPreference(memberId, memberPreferenceRequest);
-        return ResponseEntity.ok().build();
-    }
 
 }
