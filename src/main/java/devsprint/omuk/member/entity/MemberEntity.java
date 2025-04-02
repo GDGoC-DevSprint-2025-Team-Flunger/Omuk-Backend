@@ -3,10 +3,13 @@ package devsprint.omuk.member.entity;
 import devsprint.omuk.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "member")
-@Data
+@Getter
+@Setter
 public class MemberEntity {
 
     @Id
