@@ -1,9 +1,8 @@
 package devsprint.omuk.recipe.service;
 
 import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.dto.RecipeListResponseDto;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
-import devsprint.omuk.recipe.dto.RecipeSummaryDto;
-import devsprint.omuk.recipe.repository.FavoriteRepository;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,9 +21,9 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final FavoriteRepository favoriteRepository;
 
-    public List<RecipeSummaryDto> getAllRecipeSummaries() {
+    public List<RecipeListResponseDto> getAllRecipes() {
         return recipeRepository.findAll().stream()
-                .map(Recipe::toSummaryDto)
+                .map(r -> new RecipeListResponseDto(r.getId(), r.getTitle(), r.getImageUrl()))
                 .collect(Collectors.toList());
     }
 
@@ -32,21 +31,14 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(id).orElse(null);
         return recipe != null ? recipe.toDto() : null;    }
 
-    public List<RecipeSummaryDto> getRecommendation(
-            List<MealTime> mealTimes,
-            List<Season> seasons,
-            String keyword,
-            List<TasteType> tasteTags,
-            List<AllergyTag> excludeAllergies,
-            List<String> selectedIngredients
-    ) {
-        List<Recipe> results;
+    public List<RecipeListResponseDto> getRecommendation(List<MealTime> mealTimes, List<Season> seasons, String keyword, List<TasteType> tasteTags,List<String> selectedIngredient, List<AllergyTag> excludeAllergies) {
+        List<Recipe> results = recipeRepository.findAll();
 
         //키워드 조건 필터 먼저
         if (keyword != null && !keyword.isBlank()) {
-            results = recipeRepository.findByTitleContaining(keyword);
-        } else {
-            results = recipeRepository.findAll();
+            results = results.stream()
+                    .filter(r -> r.getTitle().contains(keyword))
+                    .collect(Collectors.toList());
         }
 
         //식사시간 조건 필터
@@ -70,6 +62,12 @@ public class RecipeService {
                     .collect(Collectors.toList());
         }
 
+        if (selectedIngredient != null && !selectedIngredient.isEmpty()) {
+            results = results.stream()
+                    .filter(r-> !Collections.disjoint(r.getIngredients(),selectedIngredient))
+                    .collect(Collectors.toList());
+        }
+
         //알러지 제외 조건 필터
         if (excludeAllergies != null && !excludeAllergies.isEmpty()) {
             results = results.stream()
@@ -77,20 +75,16 @@ public class RecipeService {
                     .collect(Collectors.toList());
         }
 
-        //재료 기반 필터
-        if (selectedIngredients != null && !selectedIngredients.isEmpty()) {
-            results = results.stream()
-                    .filter(r -> !Collections.disjoint(r.getIngredients(), selectedIngredients))
-                    .collect(Collectors.toList());
-        }
+        return results.stream()
+                .map(r -> new RecipeListResponseDto(r.getId(), r.getTitle(), r.getImageUrl()))
+                .collect(Collectors.toList());
+    }
 
-        return results.stream().map(Recipe::toSummaryDto).collect(Collectors.toList());    }
-
-    public List<RecipeSummaryDto> getRandomRecipeSummaries(int count) {
+    public List<RecipeListResponseDto> getRandomRecipes(int count) {
         List<Recipe> all = recipeRepository.findAll();
         Collections.shuffle(all);
         return all.stream().limit(count)
-                .map(Recipe::toSummaryDto)
+                .map(r -> new RecipeListResponseDto(r.getId(), r.getTitle(), r.getImageUrl()))
                 .collect(Collectors.toList());
     }
 

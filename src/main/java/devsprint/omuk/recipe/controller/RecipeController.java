@@ -1,6 +1,7 @@
 package devsprint.omuk.recipe.controller;
 
 import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.dto.RecipeListResponseDto;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
 import devsprint.omuk.recipe.dto.RecipeSummaryDto;
 import devsprint.omuk.recipe.service.RecipeService;
@@ -20,8 +21,8 @@ public class RecipeController {
 
     //전체 레시피 조회
     @GetMapping("/list")
-    public ResponseEntity<List<RecipeSummaryDto>> getAllRecipes() {
-        return ResponseEntity.ok(recipeService.getAllRecipeSummaries());
+    public List<RecipeListResponseDto> getAllRecipes() {
+        return recipeService.getAllRecipes();
     }
 
     //특정 레시피 조회
@@ -33,23 +34,21 @@ public class RecipeController {
 
     //랜덤 추천
     @GetMapping("/recommendation/random")
-    public ResponseEntity<List<RecipeSummaryDto>> getRandomRecommendation() {
-        return ResponseEntity.ok(recipeService.getRandomRecipeSummaries(4));
+    public List<RecipeListResponseDto> getRandomRecommendation() {
+        return recipeService.getRandomRecipes(4);
     }
 
     //조건 기반 추천(keyword, mealTime, season, tasteTag)
     @GetMapping("/recommendation")
-    public ResponseEntity<List<RecipeSummaryDto>> getRecommendation(
+    public List<RecipeListResponseDto> getRecommendation(
             @RequestParam(required = false) List<MealTime> mealTimes,
             @RequestParam(required = false) List<Season> seasons,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) List<TasteType> tasteTags,
-            @RequestParam(required = false) List<String> selectedIngredients,
+            @RequestParam(required = false) List<String> selectedIngredient,
             @RequestParam(required = false) List<AllergyTag> excludeAllergies
     ) {
-        return ResponseEntity.ok(
-                recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients)
-        );
+        return recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, selectedIngredient, excludeAllergies);
     }
 
     // 즐겨찾기 추가
