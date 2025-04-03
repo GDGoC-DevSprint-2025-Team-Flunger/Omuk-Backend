@@ -2,6 +2,7 @@ package devsprint.omuk.recipe.controller;
 
 import devsprint.omuk.recipe.domain.*;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
+import devsprint.omuk.recipe.dto.RecipeSummaryDto;
 import devsprint.omuk.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,8 @@ public class RecipeController {
 
     //전체 레시피 조회
     @GetMapping("/list")
-    public ResponseEntity<List<RecipeResponseDto>> getAllRecipes() {
-        List<RecipeResponseDto> recipes = recipeService.getAllRecipes();
-        return ResponseEntity.ok(recipes);
+    public ResponseEntity<List<RecipeSummaryDto>> getAllRecipes() {
+        return ResponseEntity.ok(recipeService.getAllRecipeSummaries());
     }
 
     //특정 레시피 조회
@@ -33,14 +33,13 @@ public class RecipeController {
 
     //랜덤 추천
     @GetMapping("/recommendation/random")
-    public ResponseEntity<List<RecipeResponseDto>> getRandomRecommendation() {
-        List<RecipeResponseDto> recipes = recipeService.getRandomRecipes(4);
-        return ResponseEntity.ok(recipes);
+    public ResponseEntity<List<RecipeSummaryDto>> getRandomRecommendation() {
+        return ResponseEntity.ok(recipeService.getRandomRecipeSummaries(4));
     }
 
     //조건 기반 추천(keyword, mealTime, season, tasteTag)
     @GetMapping("/recommendation")
-    public ResponseEntity<List<RecipeResponseDto>> getRecommendation(
+    public ResponseEntity<List<RecipeSummaryDto>> getRecommendation(
             @RequestParam(required = false) List<MealTime> mealTimes,
             @RequestParam(required = false) List<Season> seasons,
             @RequestParam(required = false) String keyword,
@@ -48,8 +47,9 @@ public class RecipeController {
             @RequestParam(required = false) List<String> selectedIngredients,
             @RequestParam(required = false) List<AllergyTag> excludeAllergies
     ) {
-        List<RecipeResponseDto> recipes = recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients);
-        return ResponseEntity.ok(recipes);
+        return ResponseEntity.ok(
+                recipeService.getRecommendation(mealTimes, seasons, keyword, tasteTags, excludeAllergies, selectedIngredients)
+        );
     }
 
     // 즐겨찾기 추가
@@ -64,7 +64,7 @@ public class RecipeController {
 
     // 즐겨찾기 레시피 조회
     @GetMapping("/favorites")
-    public List<RecipeResponseDto> getFavoriteRecipes(@RequestParam Integer memberId) {
-        return recipeService.getFavoriteRecipes(memberId);
+    public List<RecipeSummaryDto> getFavoriteRecipes(@RequestParam Integer memberId) {
+        return recipeService.getFavoriteRecipeSummaries(memberId);
     }
 }
