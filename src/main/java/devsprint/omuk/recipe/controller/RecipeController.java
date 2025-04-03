@@ -3,7 +3,6 @@ package devsprint.omuk.recipe.controller;
 import devsprint.omuk.recipe.domain.*;
 import devsprint.omuk.recipe.dto.RecipeListResponseDto;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
-import devsprint.omuk.recipe.dto.RecipeSummaryDto;
 import devsprint.omuk.recipe.service.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +51,9 @@ public class RecipeController {
     }
 
     // 즐겨찾기 추가
-    @PostMapping("/favorites/add")
+    @PostMapping("/favorites")
     public ResponseEntity<String> addFavorite(
-            @RequestParam Integer memberId,
+            @RequestParam Long memberId,
             @RequestParam Long recipeId
     ) {
         recipeService.addFavorite(memberId, recipeId);
@@ -62,8 +61,8 @@ public class RecipeController {
     }
 
     // 즐겨찾기 레시피 조회
-    @GetMapping("/favorites")
-    public List<RecipeSummaryDto> getFavoriteRecipes(@RequestParam Integer memberId) {
+    @GetMapping("/favorites/{memberId}")
+    public List<RecipeListResponseDto> getFavoriteRecipes(@PathVariable Long memberId) {
         return recipeService.getFavoriteRecipeSummaries(memberId);
     }
 }

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
-    List<Favorite> findByMemberId(Integer memberId);  // memberId로 즐겨찾기 레시피 조회
-    boolean existsByMemberIdAndRecipeId(Integer memberId, Long recipeId);  // 해당 멤버의 레시피가 즐겨찾기 되어 있는지 확인
+    List<Favorite> findByMemberId(Long memberId);  // memberId로 즐겨찾기 레시피 조회
+    boolean existsByMemberIdAndRecipeId(Long memberId, Long recipeId);  // 해당 멤버의 레시피가 즐겨찾기 되어 있는지 확인
 }

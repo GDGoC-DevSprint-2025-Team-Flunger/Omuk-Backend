@@ -272,7 +272,7 @@ public class RecipeDataInitializer {
         Recipe kimchi = recipeRepository.findByTitleContaining("김치볶음밥").get(0);
         Recipe toast = recipeRepository.findByTitleContaining("프렌치토스트").get(0);
 
-        recipeService.addFavorite(1, kimchi.getId());
-        recipeService.addFavorite(1, toast.getId());
+        recipeService.addFavorite(1l, kimchi.getId());
+        recipeService.addFavorite(1l, toast.getId());
     }
 }

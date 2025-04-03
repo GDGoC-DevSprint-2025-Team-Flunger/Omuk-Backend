@@ -1,7 +1,6 @@
 package devsprint.omuk.recipe.domain;
 
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
-import devsprint.omuk.recipe.dto.RecipeSummaryDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -83,11 +82,4 @@ public class Recipe {
                 .build();
     }
 
-    public RecipeSummaryDto toSummaryDto() {
-        return RecipeSummaryDto.builder()
-                .id(this.id)
-                .title(this.title)
-                .imageUrl(this.imageUrl)
-                .build();
-    }
 }

@@ -3,6 +3,7 @@ package devsprint.omuk.recipe.service;
 import devsprint.omuk.recipe.domain.*;
 import devsprint.omuk.recipe.dto.RecipeListResponseDto;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
+import devsprint.omuk.recipe.repository.FavoriteRepository;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -90,21 +91,19 @@ public class RecipeService {
 
     // 즐겨찾기 추가
     @Transactional
-    public void addFavorite(Integer memberId, Long recipeId) {
+    public void addFavorite(Long memberId, Long recipeId) {
         // 이미 즐겨찾기 된 레시피는 다시 추가하지 않음
         if (!favoriteRepository.existsByMemberIdAndRecipeId(memberId, recipeId)) {
-            Favorite favorite = new Favorite(memberId, recipeId);
-            favoriteRepository.save(favorite);
+            favoriteRepository.save(new Favorite(memberId, recipeId));
         }
     }
 
     // 즐겨찾기 레시피 조회
-    public List<RecipeSummaryDto> getFavoriteRecipeSummaries(Integer memberId) {
-        List<Favorite> favorites = favoriteRepository.findByMemberId(memberId);
-        return favorites.stream()
+    public List<RecipeListResponseDto> getFavoriteRecipeSummaries(Long memberId) {
+        return favoriteRepository.findByMemberId(memberId).stream()
                 .map(fav -> recipeRepository.findById(fav.getRecipeId()).orElse(null))
                 .filter(Objects::nonNull)
-                .map(Recipe::toSummaryDto)
+                .map(r -> new RecipeListResponseDto(r.getId(), r.getTitle(), r.getImageUrl())) // ✅ RecipeListResponseDto 사용
                 .collect(Collectors.toList());
     }
 

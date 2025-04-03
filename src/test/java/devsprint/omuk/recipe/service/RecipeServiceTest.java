@@ -1,8 +1,8 @@
 package devsprint.omuk.recipe.service;
 
 import devsprint.omuk.recipe.domain.*;
+import devsprint.omuk.recipe.dto.RecipeListResponseDto;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
-import devsprint.omuk.recipe.dto.RecipeSummaryDto;
 import devsprint.omuk.recipe.repository.FavoriteRepository;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,10 +51,10 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void testGetAllRecipeSummaries() {
+    void testGetAllRecipes() {
         when(recipeRepository.findAll()).thenReturn(List.of(recipe));
 
-        List<RecipeSummaryDto> result = recipeService.getAllRecipeSummaries();
+        List<RecipeListResponseDto> result = recipeService.getAllRecipes();
 
         assertEquals(1, result.size());
         assertEquals("김치볶음밥", result.get(0).getTitle());
@@ -71,10 +71,10 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void testGetRandomRecipeSummaries() {
+    void testGetRandomRecipes() {
         when(recipeRepository.findAll()).thenReturn(List.of(recipe));
 
-        List<RecipeSummaryDto> result = recipeService.getRandomRecipeSummaries(1);
+        List<RecipeListResponseDto> result = recipeService.getRandomRecipes(1);
 
         assertEquals(1, result.size());
         assertEquals("김치볶음밥", result.get(0).getTitle());
@@ -82,9 +82,9 @@ public class RecipeServiceTest {
 
     @Test
     void testGetRecommendationWithKeyword() {
-        when(recipeRepository.findByTitleContaining("김치")).thenReturn(List.of(recipe));
+        when(recipeRepository.findAll()).thenReturn(List.of(recipe));
 
-        List<RecipeSummaryDto> result = recipeService.getRecommendation(
+        List<RecipeListResponseDto> result = recipeService.getRecommendation(
                 null, null, "김치", null, null, null
         );
 
@@ -94,7 +94,7 @@ public class RecipeServiceTest {
 
     @Test
     void testAddFavorite() {
-        Integer memberId = 1;
+        Long memberId = 1L;
         Long recipeId = 1L;
 
         when(favoriteRepository.existsByMemberIdAndRecipeId(memberId, recipeId)).thenReturn(false);
@@ -105,13 +105,13 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void testGetFavoriteRecipeSummaries() {
-        Favorite favorite = new Favorite(1, 1L);
+    void testGetFavoriteRecipes() {
+        Favorite favorite = new Favorite(1L, 1L);
 
-        when(favoriteRepository.findByMemberId(1)).thenReturn(List.of(favorite));
+        when(favoriteRepository.findByMemberId(1L)).thenReturn(List.of(favorite));
         when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe));
 
-        List<RecipeSummaryDto> result = recipeService.getFavoriteRecipeSummaries(1);
+        List<RecipeListResponseDto> result = recipeService.getFavoriteRecipeSummaries(1L);
 
         assertEquals(1, result.size());
         assertEquals("김치볶음밥", result.get(0).getTitle());

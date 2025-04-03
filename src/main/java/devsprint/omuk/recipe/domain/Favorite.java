@@ -18,12 +18,12 @@ public class Favorite {
     private Long id;
 
     @Column(name = "member_id", nullable = false)
-    private Integer memberId;  // memberId 저장
+    private Long memberId;  // memberId 저장
 
     @Column(name = "recipe_id", nullable = false)
     private Long recipeId;  // recipeId만 저장 (Integer 타입)
 
-    public Favorite(Integer memberId, Long recipeId) {
+    public Favorite(Long memberId, Long recipeId) {
         this.memberId = memberId;
         this.recipeId = recipeId;
     }
