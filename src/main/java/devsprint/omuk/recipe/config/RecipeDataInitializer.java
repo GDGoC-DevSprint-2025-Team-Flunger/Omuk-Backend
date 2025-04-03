@@ -2,6 +2,7 @@ package devsprint.omuk.recipe.config;
 
 import devsprint.omuk.recipe.domain.*;
 import devsprint.omuk.recipe.repository.RecipeRepository;
+import devsprint.omuk.recipe.service.RecipeService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import java.util.Map;
 public class RecipeDataInitializer {
 
     private final RecipeRepository recipeRepository;
+
+    private final RecipeService recipeService;
 
     @PostConstruct
     public void init() {
@@ -265,5 +268,11 @@ public class RecipeDataInitializer {
                         .build()
                 );
         recipeRepository.saveAll(recipes);
+
+        Recipe kimchi = recipeRepository.findByTitleContaining("김치볶음밥").get(0);
+        Recipe toast = recipeRepository.findByTitleContaining("프렌치토스트").get(0);
+
+        recipeService.addFavorite(1, kimchi.getId());
+        recipeService.addFavorite(1, toast.getId());
     }
 }
