@@ -2,6 +2,7 @@ package devsprint.omuk.recipe.service;
 
 import devsprint.omuk.recipe.domain.*;
 import devsprint.omuk.recipe.dto.RecipeResponseDto;
+import devsprint.omuk.recipe.dto.RecipeSummaryDto;
 import devsprint.omuk.recipe.repository.FavoriteRepository;
 import devsprint.omuk.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,63 +51,69 @@ public class RecipeServiceTest {
     }
 
     @Test
-    void testGetAllRecipes() {
+    void testGetAllRecipeSummaries() {
         when(recipeRepository.findAll()).thenReturn(List.of(recipe));
 
-        List<RecipeResponseDto> recipes = recipeService.getAllRecipes();
+        List<RecipeSummaryDto> result = recipeService.getAllRecipeSummaries();
 
-        assertNotNull(recipes);
-        assertEquals(1, recipes.size());
-        assertEquals("김치볶음밥", recipes.get(0).getTitle());
+        assertEquals(1, result.size());
+        assertEquals("김치볶음밥", result.get(0).getTitle());
     }
 
     @Test
     void testGetRecipeById() {
         when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe));
 
-        RecipeResponseDto result = recipeService.getRecipeById(1L);
+        RecipeResponseDto dto = recipeService.getRecipeById(1L);
 
-        assertNotNull(result);
-        assertEquals("김치볶음밥", result.getTitle());
+        assertNotNull(dto);
+        assertEquals("김치볶음밥", dto.getTitle());
+    }
+
+    @Test
+    void testGetRandomRecipeSummaries() {
+        when(recipeRepository.findAll()).thenReturn(List.of(recipe));
+
+        List<RecipeSummaryDto> result = recipeService.getRandomRecipeSummaries(1);
+
+        assertEquals(1, result.size());
+        assertEquals("김치볶음밥", result.get(0).getTitle());
     }
 
     @Test
     void testGetRecommendationWithKeyword() {
         when(recipeRepository.findByTitleContaining("김치")).thenReturn(List.of(recipe));
 
-        List<RecipeResponseDto> recipes = recipeService.getRecommendation(
-                null, null, "김치", null, null, null);
+        List<RecipeSummaryDto> result = recipeService.getRecommendation(
+                null, null, "김치", null, null, null
+        );
 
-        assertNotNull(recipes);
-        assertEquals(1, recipes.size());
-        assertEquals("김치볶음밥", recipes.get(0).getTitle());
+        assertEquals(1, result.size());
+        assertEquals("김치볶음밥", result.get(0).getTitle());
     }
 
     @Test
-    void testGetRandomRecipes() {
-        when(recipeRepository.findAll()).thenReturn(List.of(recipe));
+    void testAddFavorite() {
+        Integer memberId = 1;
+        Long recipeId = 1L;
 
-        List<RecipeResponseDto> randomRecipes = recipeService.getRandomRecipes(1);
+        when(favoriteRepository.existsByMemberIdAndRecipeId(memberId, recipeId)).thenReturn(false);
 
-        assertNotNull(randomRecipes);
-        assertEquals(1, randomRecipes.size());
+        recipeService.addFavorite(memberId, recipeId);
+
+        verify(favoriteRepository, times(1)).save(any(Favorite.class));
     }
 
     @Test
-    void testGetFavoriteRecipes() {
-        Favorite favorite = Favorite.builder()
-                .id(1L)
-                .memberId(100)
-                .recipeId(1L)
-                .build();
+    void testGetFavoriteRecipeSummaries() {
+        Favorite favorite = new Favorite(1, 1L);
 
-        when(favoriteRepository.findByMemberId(100)).thenReturn(List.of(favorite));
+        when(favoriteRepository.findByMemberId(1)).thenReturn(List.of(favorite));
         when(recipeRepository.findById(1L)).thenReturn(Optional.of(recipe));
 
-        List<RecipeResponseDto> favorites = recipeService.getFavoriteRecipes(100);
+        List<RecipeSummaryDto> result = recipeService.getFavoriteRecipeSummaries(1);
 
-        assertNotNull(favorites);
-        assertEquals(1, favorites.size());
-        assertEquals("김치볶음밥", favorites.get(0).getTitle());
+        assertEquals(1, result.size());
+        assertEquals("김치볶음밥", result.get(0).getTitle());
     }
 }
