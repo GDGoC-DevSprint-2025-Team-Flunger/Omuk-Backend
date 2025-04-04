@@ -33,11 +33,6 @@ public class MemberService {
         return new MemberResponse(memberEntity);
     }
 
-//    public void saveMemberPreference(MemberPreferenceRequest memberPreferenceRequest){
-//        MemberPreference memberPreference = memberPreferenceRequest.toDomain();
-//        memberPreferenceRepository.save(MemberPreferenceEntity.of(memberPreference));
-//    }
-
     public MemberPreferenceResponse getPreferenceByMemberId(Long memberId) {
         MemberPreferenceProjection projection = memberPreferenceRepository.findByMemberId(memberId);
 
