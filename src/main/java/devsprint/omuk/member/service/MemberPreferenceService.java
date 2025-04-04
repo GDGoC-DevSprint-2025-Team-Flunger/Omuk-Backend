@@ -62,12 +62,10 @@ public class MemberPreferenceService {
 
     @Transactional
     public MemberPreferenceResponse updateMemberPreference(Long memberId, MemberPreferenceRequest request) {
-        // ✅ 기존 데이터 삭제
         tasteRepository.deleteByMemberId(memberId);
         allergyRepository.deleteByMemberId(memberId);
         timeRepository.deleteByMemberId(memberId);
 
-        // ✅ 새로운 데이터 저장
         if (request.getTaste() != null) {
             request.getTaste().forEach(taste ->
                     tasteRepository.save(TasteEntity.builder()
@@ -95,7 +93,6 @@ public class MemberPreferenceService {
             );
         }
 
-        // ✅ 수정된 데이터 조회 및 반환
         MemberPreferenceProjection updatedPreferences = memberPreferenceRepository.findByMemberId(memberId);
         return new MemberPreferenceResponse(updatedPreferences);
     }
