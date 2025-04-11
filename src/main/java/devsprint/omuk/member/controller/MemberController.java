@@ -52,5 +52,14 @@ public class MemberController{
         return ResponseEntity.ok(memberService.getPreferenceByMemberId(memberId));
     }
 
+    @PatchMapping("/preference/{memberId}")
+    public ResponseEntity<MemberPreferenceResponse> updateMemberPreferences(
+            @PathVariable Long memberId,
+            @RequestBody MemberPreferenceRequest request) {
+
+        MemberPreferenceResponse updatedPreferences = memberPreferenceService.updateMemberPreference(memberId, request);
+        return ResponseEntity.ok(updatedPreferences);
+    }
+
 
 }

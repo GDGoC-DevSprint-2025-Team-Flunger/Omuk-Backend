@@ -2,7 +2,7 @@ spring:
   application:
     name: omuk
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
+    url: jdbc:h2:~/omuk
     driverClassName: org.h2.Driver
     username: sa
   jpa:
